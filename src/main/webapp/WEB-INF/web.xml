@@ -5,17 +5,54 @@
 <web-app>
 	<display-name>UnivDate</display-name>
 
-	<servlet>
-		<servlet-name>restSdkService</servlet-name>
-		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+	<!-- order is important here. The Htmleasy seems to terminate the filter 
+		chain before we get a go to run otherwise -->
+
+	<filter>
+		<filter-name>Hibernate</filter-name>
+		<filter-class>uk.ac.cam.cl.dtg.univdate.HibernateSessionRequestFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>Soy Globals</filter-name>
+		<filter-class>uk.ac.cam.cl.dtg.univdate.SetGlobalsFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>Htmleasy</filter-name>
+		<filter-class>com.googlecode.htmleasy.HtmleasyFilterDispatcher</filter-class>
 		<init-param>
-			<param-name>applicationConfigLocation</param-name>
-			<param-value>/WEB-INF/application</param-value>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>uk.ac.cam.cl.dtg.univdate.App</param-value>
 		</init-param>
+	</filter>
+
+
+	<filter-mapping>
+		<filter-name>Hibernate</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>Soy Globals</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>Htmleasy</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<servlet>
+		<servlet-name>soy</servlet-name>
+		<servlet-class>com.papercut.silken.SilkenServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>restSdkService</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
+		<servlet-name>soy</servlet-name>
+		<url-pattern>/soy/*</url-pattern>
 	</servlet-mapping>
+
 </web-app>

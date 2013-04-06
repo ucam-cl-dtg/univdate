@@ -1,0 +1,52 @@
+{namespace calendar}
+
+/**
+ * List of all event templates
+ * 
+ * @param list
+ */
+{template .eventtemplates}
+	{call shared.page.header /}
+	<h1>Event templates</h1>
+	<table cellspacing="10">
+		{foreach $t in $list}
+			{call .eventtemplate data="$t" /}
+		{/foreach}
+	</table>
+	
+	<form method="post" action="{$ij.siteRoot}/template/new">
+		<div>Title: <input type="text" name="title"/></div>
+		<div>Location: <input type="text" name="location"/></div>
+		<div>Organiser: <input type="text" name="organiser"/></div>
+		<div>Tags: <input type="text" name="tags"/></div>
+		<div>Term num: <input type="text" name="term"/></div>
+		<div>Day num: <input type="text" name="day"/></div>
+		<div>Time: <input type="text" name="hourOfDay"/>:<input type="text" name="minute"/></div>
+		<div><input type="submit"/></div>
+	</form>
+	{call shared.page.footer /}
+{/template}
+
+
+/**
+ * Show a single event template
+ * 
+ * @param id
+ * @param title
+ * @param location
+ * @param organiser
+ * @param tags
+ * @param startTime
+ */
+{template .eventtemplate}
+	<tr>
+		<td>{$title}</td>
+		<td>{$location}</td>
+		<td>{$organiser}</td>
+		<td>{$tags}</td>
+		<td>{$startTime.termName}</td>
+		<td>{$startTime.day}</td>
+		<td>{$startTime.hourOfDay}:{$startTime.minute}</td>
+		<td><a href="edit/{$id}">edit</a></td>
+	</tr>
+{/template}

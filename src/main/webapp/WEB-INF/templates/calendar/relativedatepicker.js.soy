@@ -1,0 +1,58 @@
+{namespace calendar}
+
+/**
+ * A date picker relative to term
+ * 
+ * @param numWeeks
+ * 
+ */
+{template .relativedatepicker}
+<div class="ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" style="display: block;">
+	<table class="ui-datepicker-calendar">
+    	<tbody>
+    		{call .week}
+    			{param weekNumber: -1 /}
+    			{param days : [false,false,false,false,false,false,false] /} 
+    		{/call}
+    		{call .week}
+    			{param weekNumber: 0 /}
+    			{param days : [false,false,true ,true ,true ,true ,true ] /} 
+    		{/call}
+    		{for $i in range(1,$numWeeks)}
+			{call .week}
+				{param weekNumber: $i /}
+				{param days : [true ,true ,true ,true ,true ,true ,true ] /} 
+			{/call}
+    		{/for}
+    		{call .week}
+    			{param weekNumber: $numWeeks /}
+    			{param days : [true ,true ,true ,true ,true ,true ,false] /} 
+    		{/call}
+    		{call .week}
+    			{param weekNumber: $numWeeks+1 /}
+    			{param days : [false,false,false,false,false,false,false] /} 
+    		{/call}
+	   	</tbody>   	
+	</table>
+</div>
+{/template}
+
+
+/**
+ * Sub-template to show a single week outside of term in the date picker
+ * 
+ * @param weekNumber
+ * @param days
+ */
+{template .week}
+{let $dow:['Su','Mo','Tu','We','Th','Fr','Sa'] /}
+<tr>
+	{foreach $day in $days}
+	<td class="{ $day ? '' : 'ui-datepicker-other-month' } ">
+		<a href="#" week="{$weekNumber}" day="{index($day)}" class="ui-state-default { $day ? '' : 'ui-state-disabled'} ">
+			{$dow[index($day)]}
+		</a>
+	</td>
+	{/foreach}
+</tr>    	
+{/template}
